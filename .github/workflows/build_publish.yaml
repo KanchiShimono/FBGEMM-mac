@@ -27,6 +27,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
+      - name: Setup | OpenMP
+        run: |
+          brew install libomp
+
       - name: Setup | PyTorch
         run: |
           pip install --pre torch --extra-index-url https://download.pytorch.org/whl/nightly/cpu
@@ -43,6 +47,10 @@ jobs:
       - name: Check | Pip version
         run: |
           pip --version
+
+      - name: Check | Compiler version
+        run: |
+          c++ --verbose
 
       - name: Build | FBGEMM
         run: |
