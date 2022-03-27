@@ -21,6 +21,10 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup | OpenMP
+        run: |
+          brew install libomp
+
       - name: Setup | Python
         uses: actions/setup-python@v3
         with:
@@ -43,14 +47,6 @@ jobs:
       - name: Check | Pip version
         run: |
           pip --version
-
-      - name: Check | Compiler version
-        env:
-          CC: gcc-11
-          CXX: g++-11
-        run: |
-          cc --verbose
-          c++ --verbose
 
       - name: Build | FBGEMM
         env:
