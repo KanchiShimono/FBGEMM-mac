@@ -50,8 +50,8 @@ jobs:
 
       - name: Build | FBGEMM
         env:
-          CC: gcc-11
-          CXX: g++-11
+          CC: gcc-9
+          CXX: g++-9
         run: |
           cd FBGEMM/fbgemm_gpu
           rm -rf dist || true
