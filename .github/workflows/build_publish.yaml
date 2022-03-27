@@ -27,6 +27,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
+      - name: Setup | GCC
+        run: |
+          brew install gcc
+
       - name: Setup | OpenMP
         run: |
           brew install libomp
