@@ -1,0 +1,61 @@
+name: Build and Publish FBGEMM Python package
+
+on:
+  - push
+
+jobs:
+  build:
+    name: Build FBGEMM
+    strategy:
+      matrix:
+        include:
+          - os: macos-11
+            python-version: 3.9
+            python-tag: py39
+            plat-name: macos=macosx_11_0_x86_64
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup | Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Setup | PyTorch
+        run: |
+          pip install --pre torch --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+
+      - name: Setup | FBGEMM Dependencies
+        run: |
+          cd FBGEMM/fbgemm_gpu
+          pip install -r requirements.txt
+
+      - name: Check | Python version
+        run: |
+          python --version
+
+      - name: Check | Pip version
+        run: |
+          pip --version
+
+      - name: Build | FBGEMM
+        run: |
+          cd FBGEMM/fbgemm_gpu
+          rm -rf dist || true
+          python setup.py bdist_wheel \
+            --package_name=fbgemm_gpu-cpu
+            --python-tag=${{ matrix.python-tag }}
+            --cpu_only
+            --plat-name=${{ matrix.plat-name }}
+
+      - name: Publish | Upload wheel to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: fbgemm_gpu_cpu_${{ matrix.python-version }}_${{ matrix.os }}.whl
+          path: FBGEMM/fbgemm_gpu/dist/fbgemm_gpu_cpu-*.whl
