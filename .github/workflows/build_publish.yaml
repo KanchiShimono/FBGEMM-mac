@@ -49,12 +49,11 @@ jobs:
           pip --version
 
       - name: Build | FBGEMM
-        env:
-          CC: gcc-9
-          CXX: g++-9
         run: |
           cd FBGEMM/fbgemm_gpu
           rm -rf dist || true
+          sed -i.bk -e 's|-fopenmp|-Xpreprocessor;-fopenmp;-lomp;-I/usr/local/opt/libomp/include;-L/usr/local/opt/libomp/lib|g' CMakeLists.txt
+          rm CMakeLists.txt.bk
           python setup.py bdist_wheel \
             --package_name=fbgemm_gpu_nightly-cpu \
             --python-tag=${{ matrix.python-tag }} \
