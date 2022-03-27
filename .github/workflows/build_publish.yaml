@@ -27,14 +27,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
-      - name: Setup | GCC
-        run: |
-          brew install gcc
-
-      - name: Setup | OpenMP
-        run: |
-          brew install libomp
-
       - name: Setup | PyTorch
         run: |
           pip install --pre torch --extra-index-url https://download.pytorch.org/whl/nightly/cpu
@@ -53,10 +45,17 @@ jobs:
           pip --version
 
       - name: Check | Compiler version
+        env:
+          CC: gcc-11
+          CXX: g++-11
         run: |
+          cc --verbose
           c++ --verbose
 
       - name: Build | FBGEMM
+        env:
+          CC: gcc-11
+          CXX: g++-11
         run: |
           cd FBGEMM/fbgemm_gpu
           rm -rf dist || true
