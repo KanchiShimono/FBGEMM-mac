@@ -56,12 +56,12 @@ jobs:
           cd FBGEMM/fbgemm_gpu
           rm -rf dist || true
           python setup.py bdist_wheel \
-            --package_name=fbgemm_gpu-cpu \
+            --package_name=fbgemm_gpu_nightly-cpu \
             --python-tag=${{ matrix.python-tag }} \
             --cpu_only
 
       - name: Publish | Upload wheel to artifact
         uses: actions/upload-artifact@v3
         with:
-          name: fbgemm_gpu_cpu_${{ matrix.python-version }}_${{ matrix.os }}.whl
-          path: FBGEMM/fbgemm_gpu/dist/fbgemm_gpu_cpu-*.whl
+          name: fbgemm_gpu_nightly_cpu_${{ matrix.python-version }}_${{ matrix.os }}.whl
+          path: FBGEMM/fbgemm_gpu/dist/fbgemm_gpu_nightly_cpu-*.whl
