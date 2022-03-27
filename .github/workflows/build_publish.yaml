@@ -51,8 +51,7 @@ jobs:
           python setup.py bdist_wheel \
             --package_name=fbgemm_gpu-cpu \
             --python-tag=${{ matrix.python-tag }} \
-            --cpu_only \
-            --plat-name=${{ matrix.plat-name }}
+            --cpu_only
 
       - name: Publish | Upload wheel to artifact
         uses: actions/upload-artifact@v3
