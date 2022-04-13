@@ -40,7 +40,6 @@ jobs:
         run: |
           cd FBGEMM/fbgemm_gpu
           conda run python -m pip install -r requirements.txt
-          conda install -c bottler nvidiacub
 
       - name: Check | Python version
         run: |
