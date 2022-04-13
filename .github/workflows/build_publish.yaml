@@ -33,7 +33,8 @@ jobs:
 
       - name: Setup | PyTorch
         run: |
-          conda install pytorch cudatoolkit=11.3 -c pytorch-nightly
+          conda install pytorch -c pytorch-nightly
+          conda install cudatoolkit=11.3 -c anaconda
 
       - name: Setup | FBGEMM Dependencies
         run: |
