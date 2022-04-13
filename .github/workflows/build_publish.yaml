@@ -25,20 +25,21 @@ jobs:
         run: |
           brew install libomp
 
-      - name: Setup | Python
-        uses: actions/setup-python@v3
+      - name: Setup | Miniconda
+        uses: conda-incubator/setup-miniconda@v2
         with:
+          auto-update-conda: true
           python-version: ${{ matrix.python-version }}
-          architecture: x64
 
       - name: Setup | PyTorch
         run: |
-          pip install --pre torch --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+          conda install pytorch cudatoolkit=11.3 -c pytorch-nightly
 
       - name: Setup | FBGEMM Dependencies
         run: |
           cd FBGEMM/fbgemm_gpu
-          pip install -r requirements.txt
+          conda run python -m pip install -r requirements.txt
+          conda install -c bottler nvidiacub
 
       - name: Check | Python version
         run: |
@@ -54,7 +55,7 @@ jobs:
           rm -rf dist || true
           sed -i.bk -e 's|-fopenmp|-Xpreprocessor;-fopenmp;-lomp;-I/usr/local/opt/libomp/include;-L/usr/local/opt/libomp/lib|g' CMakeLists.txt
           rm CMakeLists.txt.bk
-          python setup.py bdist_wheel \
+          conda run python setup.py bdist_wheel \
             --package_name=fbgemm_gpu_nightly-cpu \
             --python-tag=${{ matrix.python-tag }} \
             --cpu_only
